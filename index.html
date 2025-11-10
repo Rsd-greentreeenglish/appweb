@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+    <style>
+        /* تنظیمات عمومی برای فارسی */
+body {
+    /* استفاده از فونت Vazirmatn */
+    font-family: 'Vazirmatn', sans-serif; 
+    /* جهت‌دهی راست به چپ برای کل متن و صفحه */
+    direction: rtl; 
+    text-align: right; 
+}
+
+/* استایل برای ستون هدر سایت */
+.tm-site-header-col {
+    /* اطمینان از راست‌چین بودن محتوا در ستون */
+    text-align: right; 
+    margin-right: 0 !important;
+}
+
+/* استایل برای بخش اصلی هدر */
+.tm-site-header {
+    direction: rtl;
+    color: #ffffff; 
+}
+
+/* استایل برای عنوان اصلی (h1) */
+.tm-site-header h1 {
+    font-size: 2.5rem; 
+    font-weight: 700;
+    text-align: right;
+    margin-bottom: 1rem !important;
+}
+
+/* استایل برای خط زیرین */
+.tm-site-header img {
+    max-width: 100px; 
+    height: auto;
+    float: right;
+    clear: both; 
+    margin-right: 0;
+    margin-left: auto;
+    margin-bottom: 1.5rem !important;
+}
+
+/* استایل برای پاراگراف توضیحات */
+.tm-site-header p {
+    font-size: 1.1rem;
+    line-height: 1.8; 
+    text-align: right;
+    margin-top: 1rem;
+}
+/* ========================================================= */
+/* استایل‌های عمومی برای تمام متون و راست‌چین‌سازی کامل */
+/* ========================================================= */
+body {
+    /* جهت‌دهی راست به چپ برای کل صفحه */
+    direction: rtl; 
+    /* اعمال فونت قشنگ Vazirmatn به کل متن‌های صفحه */
+    font-family: 'Vazirmatn', sans-serif;
+    /* تنظیم راست‌چین پیش‌فرض برای تمام متن‌ها */
+    text-align: right;
+}
+
+/* برای اطمینان از راست‌چین بودن متون در سطرها و ستون‌های بوت‌استرپ */
+.row {
+    direction: rtl;
+}
+
+/* ========================================================= */
+/* استایل‌های بخش product__description (بخش توضیحات) */
+/* ========================================================= */
+.product__description {
+    direction: rtl;
+    text-align: right;
+}
+
+/* استایل‌دهی پاراگراف‌ها (P) در بخش توضیحات */
+.product__description p {
+    font-size: 1rem;
+    line-height: 1.8; 
+    color: #555;
+    margin-bottom: 1rem;
+    /* مهم: توجیه کردن (Justify) متن برای ظاهر مرتب و ستونی */
+    text-align: justify; 
+    /* برای اطمینان از راست به چپ بودن در مرورگرهای مختلف */
+    direction: rtl; 
+}
+
+/* استایل‌دهی عنوان صفحه (h2) */
+.tm-page-title {
+    font-weight: 700;
+    text-align: right;
+    /* اطمینان از راست به چپ بودن عنوان */
+    direction: rtl; 
+}
+
+/* استایل‌دهی متن لینک ناوبری (درباره ما) */
+.tm-nav-text {
+    font-family: 'Vazirmatn', sans-serif; /* اطمینان از اعمال فونت */
+    font-weight: 700;
+    direction: rtl;
+}
+/* ========================================================= */
+/* تنظیمات راست‌چین‌سازی برای بخش توضیحات */
+/* ========================================================= */
+.product__description {
+    /* اطمینان از جهت‌دهی راست به چپ در کانتینر اصلی */
+    direction: rtl;
+    text-align: right; 
+}
+
+/* ========================================================= */
+/* تنظیمات راست‌چین برای عنوان (h2) */
+/* ========================================================= */
+.tm-page-title {
+    /* اطمینان از راست‌چین بودن عنوان */
+    text-align: right !important; 
+    direction: rtl !important;
+}
+
+/* ========================================================= */
+/* تنظیمات راست‌چین برای تصاویر (img) */
+/* ========================================================= */
+.product__description img {
+    /* مهم: برای راست‌چین شدن تصویر در ستون، باید مارجین چپ را صفر و مارجین راست را auto کنیم. */
+    /* اگر تصویر خاصیت display: block; داشته باشد، این کار آن را به راست ستون می‌چسباند. */
+    margin-right: 0;
+    margin-left: auto;
+    /* برای اطمینان از تراز راست اگر در خط بودند */
+    float: right;
+}
+
+/* برای اطمینان از اینکه ستون‌های بوت‌استرپ راست‌چین هستند */
+.col-12, .col-sm-12, .col-md-6, .col-lg-6, .col-xl-6 {
+    /* اطمینان از اینکه متن داخل ستون از راست شروع شود */
+    text-align: right;
+    direction: rtl;
+}
+
+/* ========================================================= */
+/* توجیه مجدد پاراگراف‌ها (اگر در کدهای قبلی نبود) */
+/* ========================================================= */
+.product__description p {
+    direction: rtl;
+    text-align: justify; /* توجیه برای زیبایی ستونی */
+        font-family: 'Vazirmatn', sans-serif; /* اطمینان از اعمال فونت */
+    font-weight: 700;
+}
+h1,h2,h3,h4,h5,h6,p,a,i,li,ul{
+        font-family: 'Vazirmatn', sans-serif; 
+            direction: rtl;
+}
+div{
+    text-align: right;
+}
+
+    </style>
+    <title>اموزشگاه زبان درخت سبز سقز</title>
+<!--
+
+Template 2097 Pop
+
+https://www.tooplate.com/view/2097-pop
+
+-->
+    <!-- load CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">  <!-- Google web font "Open Sans" -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">                                  <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="fontawesome/css/fontawesome-all.min.css">                <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" type="text/css" href="slick/slick.css"/>                       <!-- http://kenwheeler.github.io/slick/ -->
+    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+    <link rel="stylesheet" href="css/tooplate-style.css">                               <!-- Templatemo style -->
+
+    <script>document.documentElement.className="js";var supportsCssVars=function(){var e,t=document.createElement("style");return t.innerHTML="root: { --tmp-var: bold; }",document.head.appendChild(t),e=!!(window.CSS&&window.CSS.supports&&window.CSS.supports("font-weight","var(--tmp-var)")),t.parentNode.removeChild(t),e};supportsCssVars()||alert("Please view this in a modern browser such as latest version of Chrome or Microsoft Edge.");</script>
+    
+</head>
+
+<body>
+    <div id="tm-bg"></div>
+    <div id="tm-wrap">
+        <div class="tm-main-content">
+            <div class="container tm-site-header-container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-md-col-xl-6 mb-md-0 mb-sm-4 mb-4 tm-site-header-col">
+                        <div class="tm-site-header">
+                            <h1 class="mb-4">اموزشگاه زبان درخت سبز سقز</h1>
+                            <img src="img/underline.png" class="img-fluid mb-4">
+                            <p>بهترین آموزش زبان اینگلیسی در شهر سقز را با اموزشگاه درخت سبز تجربه کنید</p>        
+                        </div>                        
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="content">
+                            <div class="grid">
+                                <div class="grid__item" id="entry-link">
+                    <div class="product">
+                        <!-- عنوان بالا -->
+                        <div class="tm-nav-link">
+                            <i class="fas fa-door-open fa-3x tm-nav-icon"></i>
+                            <span class="tm-nav-text">ورود به وب</span>
+                            <div class="product__bg"></div>        
+                        </div>
+
+                        <!-- دو کارت زیر هم -->
+                        <div class="product__description">
+                            <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <a href="https://greentreeenglish.ir/video">
+                                        <div>
+                                            <i class="fas fa-film fa-3x"></i>
+                                            <p>ورود به گالری فیلم</p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <a href="https://greentreeenglish.ir/img">
+                                        <div>
+                                            <i class="fas fa-image fa-3x"></i>
+                                            <p>ورود به گالری عکس</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                        <div class="row">
+                                <div class="col-sm-6 mb-3">
+                                    <a href="https://greentreeenglish.ir/audio">
+                                        <div>
+                                            <i class="fas fa-volume-up fa-3x"></i>
+                                            <p>ورود به فایل صوتی کتاب ها </p>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <a href="https://greentreeenglish.ir/web">
+                                        <div>
+                                            <i class="fas fa-globe fa-3x"></i>
+                                            <p>ورود به وب و وبلاگ</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                                <div class="grid__item" id="home-link">
+                                <div class="product">
+                                    <div class="tm-nav-link">
+                                        <i class="fas fa-info-circle fa-3x tm-nav-icon"></i>
+
+                                        <span class="tm-nav-text">درباره ما</span>
+                                        <div class="product__bg"></div>        
+                                    </div>                                    
+                                    <div class="product__description">
+                                        <div class="row mb-3">
+                                            <div class="col-12">
+                                                <h2 class="tm-page-title">آموزشگاه برتر سقز</h2>        
+                                            </div>
+                                        </div>                                        
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <img src="img/welcome-1.jpg" class="img-fluid mb-3" alt="آموزشگاه سقز">
+                                                <p>آموزشگاه ما با افتخار، به عنوان اولین و بزرگ‌ترین مرکز آموزش تخصصی در سقز، از سال ۱۳۹۰ فعالیت خود را آغاز کرده و در طول این سال‌ها توانسته است جایگاه ویژه‌ای در قلب مردم عزیز شهر سقز پیدا کند.</p>
+                                                <p>از همان ابتدا هدف ما این بوده که نه‌تنها یک مرکز آموزش، بلکه پایگاهی برای رشد، خلاقیت و موفقیت جوانان و علاقمندان به یادگیری باشیم.</p>    
+                                                <p>در زمانی که آموزش‌های کاربردی در سقز کمتر در دسترس بود، ما با همکاری اساتید مجرب و دلسوز، مسیر تازه‌ای در آموزش باز کردیم و با تمرکز بر کیفیت، نوآوری و تخصص، توانسته‌ایم بیش از یک دهه در کنار مردم باوفای سقز بمانیم.</p>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <p>ما در سقز متعهد به ایجاد تحول در آموزش بوده‌ایم. طی این سال‌ها، صدها دوره تخصصی در زمینه‌های مختلف از جمله زبان‌های خارجی، کامپیوتر، برنامه‌نویسی، طراحی گرافیک، حسابداری و مهارت‌های ارتباطی برگزار کرده‌ایم.</p>
+                                                <p>امروز، افتخار می‌کنیم که هزاران نفر از جوانان سقزی مسیر آینده‌ی خود را از همین آموزشگاه آغاز کرده‌اند. سقز شهری است با استعدادهای بی‌شمار؛ ما اینجاییم تا این استعدادها را شکوفا کنیم.</p>
+                                                <p>با تجهیزات مدرن، فضای آموزشی مناسب و برنامه‌ریزی دقیق، یادگیری را برای همه ممکن کرده‌ایم. علاوه بر آموزش حضوری، آموزش‌های آنلاین را نیز ارائه داده‌ایم تا در هر شرایطی، یادگیری ادامه یابد.</p>
+                                                <p>آموزش برای ما فراتر از کتاب و جزوه است؛ یعنی ساختن مسیر زندگی و شکل دادن به آینده. ما با برگزاری رویدادهای فرهنگی، کارگاه‌های تخصصی و دوره‌های کارآفرینی، همواره تلاشی فراتر از آموزش داشته‌ایم. ما یک خانواده‌ایم؛ خانواده‌ای از جوانان با انگیزه و استادانی دلسوز برای توسعه پایدار سقز.</p>
+                                                <img src="img/welcome-2.jpg" class="img-fluid mt-3" alt="کلاس‌های آموزشگاه">
+                                            </div>                                        
+                                        </div>
+                                    </div>
+                                </div>
+
+                                </div>
+
+                                <div class="grid__item" id="exam-link">
+                                    <div class="product">
+                                        <div class="tm-nav-link">
+                                            <i class="fas fa-language fa-3x tm-nav-icon"></i>
+                                            <span class="tm-nav-text">آزمون جامع زبان</span>
+                                            <div class="product__bg"></div>            
+                                        </div>                                     
+                                        <div class="product__description">
+                                            <div class="p-sm-4 p-2">
+                                                <div class="row mb-3">
+                                                    <div class="col-12">
+                                                        <h2 class="tm-page-title">آزمون جامع زبان آموزشگاه درخت سبز</h2>        
+                                                    </div>
+                                                </div>
+                                                <div class="row tm-reverse-sm">
+                                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                                        <p class="mb-4">آزمون جامع زبان آموزشگاه درخت سبز، نخستین و برترین آزمون تخصصی ارزیابی زبان در شهر سقز است که از سال ۱۳۹۰ به‌صورت حرفه‌ای برگزار می‌شود. این آزمون سالانه یک‌بار برگزار شده و ویژه‌ی زبان‌آموزانی از سطح ۱ تا سطح ۵ طراحی شده است.</p>
+                                                        <p class="mb-4">هدف از برگزاری این آزمون، سنجش دقیق مهارت‌های زبانی شامل مهارت‌های چهارگانه (شنیداری، گفتاری، نوشتاری و درک مطلب) براساس استانداردهای بین‌المللی است. این آزمون فرصتی است برای زبان‌آموزان تا با ارزیابی سطح واقعی خود، مسیر یادگیری مؤثرتری را انتخاب کنند.</p>
+                                                        <p class="mb-4">آموزشگاه درخت سبز با سابقه‌ای درخشان در زمینه آموزش زبان‌های خارجی و بهره‌گیری از اساتید مجرب، از پیشگامان آموزش تخصصی زبان در منطقه است و آزمون جامع یکی از افتخارات و دستاوردهای مهم این مجموعه به‌شمار می‌رود.</p>
+
+                                                        <h4 class="mt-4 mb-3">سؤالات متداول درباره آزمون جامع</h4>
+                                                        <p><strong>آزمون جامع آموزشگاه درخت سبز چیست؟</strong><br>
+                                                        آزمون جامع زبان آموزشگاه درخت سبز یک آزمون استاندارد سالیانه است که برای ارزیابی سطح زبان‌آموزان در سطوح ۱ تا ۵ برگزار می‌شود. این آزمون اولین و معتبرترین آزمون شهر سقز در حوزه آموزش زبان می‌باشد.</p>
+
+                                                        <p><strong>چه کسانی می‌توانند در آزمون شرکت کنند؟</strong><br>
+                                                        تمام زبان‌آموزانی که در سطوح ۱ تا ۵ آموزشگاه ثبت‌نام کرده‌اند یا در گذشته دوره‌ای گذرانده‌اند، می‌توانند در این آزمون شرکت کنند.</p>
+
+                                                        <p><strong>آزمون چند بار در سال برگزار می‌شود؟</strong><br>
+                                                        این آزمون تنها یک‌بار در سال برگزار می‌شود و نتایج آن برای ارتقا سطح و دریافت گواهی رسمی مورد استفاده قرار می‌گیرد.</p>
+
+                                                        <p><strong>سطوح مختلف آزمون چگونه تعیین می‌شوند؟</strong><br>
+                                                        آزمون شامل سؤالاتی متناسب با سطوح ۱ تا ۵ است و هر زبان‌آموز بر اساس سطح آموزشی خود، آزمون مخصوص به همان سطح را دریافت می‌کند.</p>
+
+                                                        <p><strong>آیا شرکت در آزمون الزامی است؟</strong><br>
+                                                        بله، شرکت در آزمون برای تمامی زبان‌آموزان جهت ارتقا به سطح بعدی الزامی است و نقش مهمی در مسیر آموزشی آن‌ها دارد.</p>
+
+                                                        <p><strong>چگونه در آزمون شرکت کنم؟</strong><br>
+                                                        برای شرکت در آزمون جامع، ابتدا باید مبلغ مشخصی به عنوان هزینه آزمون پرداخت نمایید. پس از پرداخت، نام شما در لیست شرکت‌کنندگان ثبت می‌شود و کارت ورود به جلسه برای شما صادر خواهد شد.</p>
+
+                                                        <a href="https://greentreeenglish.ir/web" class="btn tm-btn-gray mt-3">اطلاعات بیشتر</a>        
+                                                    </div>                                                
+                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-lg-0 mb-sm-4 mb-4 text-center">
+                                                        <img src="img/exam.jpg" class="img-fluid rounded" alt="آزمون جامع زبان درخت سبز">
+                                                        <h5 class="mt-3">مشخصات آزمون</h5>
+                                                        <ul class="text-start" style="list-style-type: disc; padding-right: 20px;">
+                                                            <li>برگزارکننده: آموزشگاه درخت سبز سقز</li>
+                                                            <li>سال آغاز برگزاری: ۱۳۹۰</li>
+                                                            <li>تعداد سطوح: ۵ سطح آموزشی</li>
+                                                            <li>نوع آزمون: تستی یا شاید تشریحی</li>
+                                                            <li>نحوه برگزاری: سالیانه، حضوری</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid__item">
+                                    <div class="product">
+                                        <div class="tm-nav-link">
+                                            <i class="fas fa-school fa-3x tm-nav-icon"></i>
+                                            <span class="tm-nav-text">دوره‌ها و کلاس‌ها</span>
+                                            <div class="product__bg"></div>             
+                                        </div>                                                                 
+                                        <div class="product__description">
+                                            <div class="p-sm-4 p-2">
+                                                <div class="row mb-3">
+                                                    <div class="col-12">
+                                                        <h2 class="tm-page-title">دوره‌های آموزشی زبان</h2>        
+                                                    </div>
+                                                </div>
+
+                                                <!-- دوره‌ها -->
+                                                <div class="courses-container">
+
+                                                    <!-- مبتدی -->
+                                                    <div class="course-card mb-4">
+                                                        <h3><i class="fas fa-seedling"></i> دوره مبتدی</h3>
+                                                        <p>در این دوره مبتدی، با اصول پایه زبان آشنا می‌شوید و مهارت‌های ضروری برای شروع یادگیری را کسب می‌کنید. مناسب برای کسانی که تازه شروع کرده‌اند و می‌خواهند به صورت گام به گام پیشرفت کنند.</p>
+                                                    </div>
+
+                                                    <!-- متوسط -->
+                                                    <div class="course-card mb-4">
+                                                        <h3><i class="fas fa-graduation-cap"></i> دوره متوسط</h3>
+                                                        <p>این دوره متوسط، برای زبان‌آموزانی طراحی شده که اصول اولیه را یاد گرفته‌اند و می‌خواهند مهارت‌های شنیداری، گفتاری و نوشتاری خود را تقویت کنند. تمرکز بر مکالمات روزمره و ساختارهای پیچیده‌تر است.</p>
+                                                    </div>
+
+                                                    <!-- پیشرفته -->
+                                                    <div class="course-card mb-4">
+                                                        <h3><i class="fas fa-book-reader"></i> دوره پیشرفته</h3>
+                                                        <p>در دوره پیشرفته، مهارت‌های زبانی شما به سطح بالاتری می‌رسد و توانایی برقراری ارتباط در موقعیت‌های حرفه‌ای و تخصصی را خواهید داشت. تمرکز بر تلفظ صحیح، درک عمیق‌تر زبان و مهارت‌های نوشتاری پیشرفته است.</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- انواع کلاس‌ها -->
+                                                <div class="row mt-5">
+                                                    <div class="col-12">
+                                                        <h2 class="tm-page-title">انواع کلاس‌ها</h2>
+                                                    </div>
+
+                                                    <!-- عمومی -->
+                                                    <div class="col-md-4 mb-4">
+                                                        <div class="class-card p-3 shadow-sm">
+                                                            <h4><i class="fas fa-users"></i> کلاس عمومی</h4>
+                                                            <p>کلاس‌های عمومی با تعداد بالای زبان‌آموزان، مناسب برای آموزش کلی و آمادگی دروس. تعامل گروهی و یادگیری از تجربه دیگران در این کلاس‌ها بالا است.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- خصوصی -->
+                                                    <div class="col-md-4 mb-4">
+                                                        <div class="class-card p-3 shadow-sm">
+                                                            <h4><i class="fas fa-user-tie"></i> کلاس خصوصی</h4>
+                                                            <p>کلاس خصوصی با حضور یک مدرس و یک زبان‌آموز، برای آموزش کاملاً شخصی و تمرکز بر نیازهای فردی. سرعت یادگیری و تمرین‌ها مطابق توان زبان‌آموز تنظیم می‌شود.</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- نیمه‌خصوصی -->
+                                                    <div class="col-md-4 mb-4">
+                                                        <div class="class-card p-3 shadow-sm">
+                                                            <h4><i class="fas fa-user-friends"></i> کلاس نیمه‌خصوصی</h4>
+                                                            <p>کلاس‌های نیمه‌خصوصی با تعداد محدود زبان‌آموزان، برای تعامل بیشتر، تمرین گروهی و بهره‌گیری از راهنمایی مدرس در یک گروه کوچک و صمیمی.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>       
+                                    </div>
+                                </div>
+
+
+                            <div class="grid__item">
+                                <div class="product">
+                                    <div class="tm-nav-link">
+                                        <i class="fas fa-comments fa-3x tm-nav-icon"></i>
+                                        <span class="tm-nav-text">تماس با ما</span>
+                                        <div class="product__bg"></div>             
+                                    </div>                                                              
+                                    <div class="product__description">
+                                        <div class="pt-sm-4 pb-sm-4 pl-sm-5 pr-sm-5 pt-2 pb-2 pl-3 pr-3">
+                                            <div class="row mb-3">
+                                                <div class="col-12">
+                                                    <h2 class="tm-page-title">تماس با آموزشگاه درخت سبز</h2>        
+                                                </div>
+                                            </div>
+                                            <div class="row mb-4">
+                                                <div class="col-12">
+                                                    <p>برای پرسش‌های خود درباره دوره‌ها، آزمون‌ها یا ثبت‌نام، می‌توانید از طریق فرم زیر با ما در تماس باشید. تیم پشتیبانی آموزشگاه درخت سبز آماده پاسخگویی به شماست.</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <form action="index.html" method="post" class="contact-form">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6 col-lg-6 col-xl-6">
+                                                            <input type="text" id="contact_name" name="contact_name" class="form-control" placeholder="نام شما" required/>
+                                                            </div>
+                                                            <div class="form-group col-md-6 col-lg-6 col-xl-6 tm-col-email">
+                                                            <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="ایمیل شما" required/>
+                                                            </div>
+                                                        </div>                                                        
+                                                        <div class="form-group">
+                                                        <textarea id="contact_message" name="contact_message" class="form-control" rows="9" placeholder="پیام شما" required></textarea>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary tm-btn-submit">ارسال پیام</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>                                            
+                                    </div>
+                                </div>
+                            </div>
+
+                            </div> 
+                        </div>                       
+                    </div>
+                </div>                
+            </div>
+<footer>
+    <p class="small tm-copyright-text">
+        © <span class="tm-current-year">2025</span> آموزشگاه درخت سبز. 
+        طراحی و ساخته شده توسط <a href="https://rasandesign.ir" class="tm-text-highlight"> شرکت راسان دیزاین </a>
+    </p>
+</footer>
+
+        </div> <!-- .tm-main-content -->  
+    </div>
+    <!-- load JS -->
+    <script src="js/jquery-3.2.1.slim.min.js"></script>         <!-- https://jquery.com/ -->    
+    <script src="slick/slick.min.js"></script>                  <!-- http://kenwheeler.github.io/slick/ -->  
+    <script src="js/anime.min.js"></script>                     <!-- http://animejs.com/ -->
+    <script src="js/main.js"></script>  
+    <script>      
+
+        function setupFooter() {
+            var pageHeight = $('.tm-site-header-container').height() + $('footer').height() + 100;
+
+            var main = $('.tm-main-content');
+
+            if($(window).height() < pageHeight) {
+                main.addClass('tm-footer-relative');
+            }
+            else {
+                main.removeClass('tm-footer-relative');   
+            }
+        }
+
+        /* DOM is ready
+        ------------------------------------------------*/
+        $(function(){
+
+            setupFooter();
+
+            $(window).resize(function(){
+                setupFooter();
+            });
+
+            $('.tm-current-year').text(new Date().getFullYear());  // Update year in copyright           
+        });
+
+    </script>             
+
+</body>
+</html>
