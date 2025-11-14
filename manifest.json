@@ -1,0 +1,46 @@
+{
+    "name": "RSD456",
+    "short_name": "RSD456",
+    "description": "وب اپلیکیشن برای جستجوی تصاویر و نتایج",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#4285F4",
+    "icons": [
+        {
+            "src": "logo2.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "logo2.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "logo2.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "logo2.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "logo2.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "logo2.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "logo2.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
