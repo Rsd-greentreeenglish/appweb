@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>پورتال زبان‌آموز</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+
+<style>
+/* ----------------------------
+  Reset & Base
+---------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Vazirmatn', sans-serif;
+}
+
+body {
+  background: #f2f2f5;
+  color: #222;
+  line-height: 1.5;
+  padding: 16px;
+}
+
+h1, h2, h3, h4 {
+  margin-bottom: 12px;
+  color: #333;
+}
+
+h1 { font-size: 2rem; }
+h3 { font-size: 1.4rem; }
+h4 { font-size: 1.1rem; }
+
+/* ----------------------------
+  Wrap & Layout
+---------------------------- */
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ----------------------------
+  Cards
+---------------------------- */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card small {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* ----------------------------
+  Rows & Columns
+---------------------------- */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.col {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+input, select, textarea, button {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}
+
+button {
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+  border: none;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* ----------------------------
+  Tables
+---------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ----------------------------
+  Announcements
+---------------------------- */
+#announcement-list .card {
+  background: rgba(0,123,255,0.05);
+}
+
+/* ----------------------------
+  Responsive
+---------------------------- */
+@media screen and (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+  button {
+    width: 100%;
+  }
+}
+
+/* ----------------------------
+  Minor Styles
+---------------------------- */
+hr {
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  margin: 16px 0;
+}
+
+.small {
+  font-size: 0.9rem;
+}
+
+</style>
+
+
+
+</head>
+<body>
+    
+    <div class="wrap">
+        <h1>پورتال زبان‌آموز</h1>
+        <div class="small" style="margin-bottom: 20px;">اطلاعات شما از سرور بارگیری می‌شود.</div>
+
+        <div id="announcements" class="card">
+            <h4>📢 اطلاعیه‌ها و پیام‌های عمومی (۵ پیام آخر)</h4>
+            <div id="announcement-list">... در حال بارگیری ...</div>
+        </div>
+
+        <section id="student-view" class="card">
+            <h3>جستجو و نمایش وضعیت با کد ملی</h3>
+            <div class="row">
+                <div class="col">
+                    <label>کد ملی</label>
+                    <input id="sv-nid" placeholder="کد ملی خود را وارد کنید" />
+                </div>
+                <div style="width:140px">
+                    <button id="sv-show">نمایش وضعیت</button>
+                </div>
+            </div>
+            <div style="margin-top:16px" id="sv-result">
+                <div class="small">لطفاً کد ملی را وارد کرده و دکمه "نمایش وضعیت" را بزنید تا سوابق شما نمایش داده شود.</div>
+            </div>
+        </section>
+        
+    </div>
+
+    <script>
+        // ==========================================
+        // جاوااسکریپت برنامه اصلی (jsapp.js)
+        // ==========================================
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0wD1laV1CE5cD6CJnHsNEBMAggpLFrAw",
+      authDomain: "app-web-30f0e.firebaseapp.com",
+      projectId: "app-web-30f0e",
+      storageBucket: "app-web-30f0e.firebasestorage.app",
+      messagingSenderId: "122904965586",
+      appId: "1:122904965586:web:39a3f5c9b4ac815070d80b",
+      measurementId: "G-HFWT1BBW0F"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = app.firestore();
+
+    // Collection/Document structure for simplicity (mimicking localStorage)
+    const DATA_STORE_COLLECTION = 'data_store';
+
+    // Global in-memory cache
+    let classesCache = [];
+    let studentsCache = [];
+    let attendanceCache = {};
+    let announcementsCache = [];
+    
+    // Custom Error Message
+    const FIREBASE_ERROR_MESSAGE = "خطا در اتصال به دیتابیس. فیلترشکن خود را روشن کنید یا اگر روشن هست به مکانی دیگر وصل شوید.";
+
+    /**
+     * Wraps an async Firebase operation with custom error handling.
+     * @param {function} operation - The async function containing the Firebase call.
+     * @returns {Promise<any>} The result of the operation.
+     */
+    async function handleFirebaseOperation(operation) {
+      try {
+        return await operation();
+      } catch (error) {
+        console.error("Firebase Error:", error);
+        alert(FIREBASE_ERROR_MESSAGE + "\n\nجزئیات خطا: " + error.message.substring(0, 100) + '...'); // Truncate error message
+        throw new Error('Firebase operation failed due to connection error.');
+      }
+    }
+
+    // Asynchronous Fetch Data from Firestore
+    async function fetchData(docId, defaultValue) {
+      return await handleFirebaseOperation(async () => {
+        const docRef = db.collection(DATA_STORE_COLLECTION).doc(docId);
+        const doc = await docRef.get();
+        return doc.exists ? doc.data().data || defaultValue : defaultValue;
+      });
+    }
+
+    // Asynchronous Save All Data to Firestore (using batch for atomic update)
+    async function saveAllData() {
+      await handleFirebaseOperation(async () => {
+        const batch = db.batch();
+        
+        // Prepare batch writes
+        batch.set(db.collection(DATA_STORE_COLLECTION).doc('classes'), { data: classesCache });
+        batch.set(db.collection(DATA_STORE_COLLECTION).doc('students'), { data: studentsCache });
+        batch.set(db.collection(DATA_STORE_COLLECTION).doc('attendance'), { data: attendanceCache });
+        batch.set(db.collection(DATA_STORE_COLLECTION).doc('announcements'), { data: announcementsCache });
+        
+        await batch.commit();
+      });
+    }
+
+    // Data access functions (now synchronous, reading from cache)
+    const $ = id=>document.getElementById(id);
+    let currentRole = 'admin';
+
+    function uid(){return 'c'+Date.now()+Math.floor(Math.random()*99)}
+    function getClasses(){return classesCache;}
+    function getStudents(){return studentsCache;}
+    function getAttendance(){return attendanceCache;}
+    function getAnnouncements(){return announcementsCache;}
+
+    // --- STUDENT SELECT POPULATION HELPER ---
+    function populateStudentSelect(classId, selectId){
+      const select = $(selectId);
+      select.innerHTML = '';
+      if (!classId) return;
+      const students = getStudents().filter(s => s.classId === classId);
+      if (students.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = 'کلاسی خالی است';
+        opt.value = '';
+        select.appendChild(opt);
+        return;
+      }
+      students.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.nid;
+        opt.textContent = s.name + ' (' + s.nid + ')';
+        select.appendChild(opt);
+      });
+    }
+    
+    window.populateDependentStudentSelect = function(classSelectId, studentSelectId) {
+      const classId = $(classSelectId).value;
+      populateStudentSelect(classId, studentSelectId);
+    }
+    
+    // --- ROLE MANAGEMENT (Shallow implementation) ---
+    function setCurrentRole(role){
+      currentRole = role;
+      // این توابع برای این نمای تک‌صفحه‌ای student-view مورد نیاز نیستند اما برای جلوگیری از خطا باقی می‌مانند.
+      document.querySelectorAll('.admin-only').forEach(el=>el.style.display = (role === 'admin' ? 'block' : 'none'));
+      document.querySelectorAll('.admin-teacher-only').forEach(el=>el.style.display = (role === 'admin' || role === 'teacher' ? 'block' : 'none'));
+
+      if(role === 'student'){
+        showSection('student-view', 'btn-student-view');
+      } else if (role === 'teacher') {
+        showSection('dashboard', 'btn-dashboard');
+      } else {
+        showSection('panel', 'btn-panel');
+      }
+      
+      const msgBox = $('dashboard')?.querySelector('.right-panel .card:nth-child(3)');
+      if(msgBox) msgBox.style.display = (role === 'admin' || role === 'teacher' ? 'block' : 'none');
+    }
+
+    function refreshLists(){
+      const classes=getClasses();
+      
+      // از آنجایی که این عناصر در HTML فعلی حذف شده‌اند، بررسی null لازم است.
+      const studentClasses = $('student-class');
+      const dash = $('dashboard-class');
+      const quick = $('select-class-quick');
+      const tuitionClass = $('tuition-class');
+      const bookClassSelect = $('book-class-select');
+      
+      // این حلقه عناصر Select مربوط به بخش‌های مدیریت (مانند داشبورد معلم یا پنل ادمین) را پر می‌کند.
+      // از آنجایی که این عناصر در HTML فعلی وجود ندارند، متغیرهای بالا null هستند و حلقه اجرا نمی‌شود.
+      [studentClasses,dash,quick,tuitionClass,bookClassSelect].forEach(sel=>{
+        if(!sel) return;
+        // اگر سلکت‌های دامی در انتهای کد تعریف شوند، این بخش اجرا شده و محتوای <option> را
+        // به صورت متن نمایش می‌دهد. اگر عناصر دامی حذف شوند، این بخش بدون مشکل رد می‌شود.
+        sel.innerHTML='';
+        classes.forEach(c=>{
+          const opt=document.createElement('option');opt.value=c.id;opt.textContent=c.name+' — معلم: '+c.teacher;sel.appendChild(opt);
+        })
+      })
+      
+      if (classes.length > 0) {
+        if ($('tuition-class')) populateStudentSelect(tuitionClass.value, 'tuition-student-select');
+        if ($('book-class-select')) populateStudentSelect(bookClassSelect.value, 'book-student-select');
+        
+        // Set initial value for dashboard class if available
+        if ($('dashboard')?.style.display === 'block') {
+          updateDashboardStudents();
+        }
+      }
+      
+      // این بخش مربوط به نمایش لیست کلاس‌ها در پنل ادمین بود و غیرفعال می‌ماند.
+      /*
+      const clDiv=$('classes-list');
+      if(clDiv) {
+        clDiv.innerHTML='';
+        if(classes.length===0){clDiv.textContent='هنوز کلاسی ساخته نشده.';return}
+        classes.forEach(c=>{
+          const d=document.createElement('div');d.className='small';d.innerHTML=`<strong>${c.name}</strong> — معلم: ${c.teacher} — کتاب: ${c.book} — ترم‌ها: ${c.terms} — جلسات/ترم: ${c.sessionsPerTerm}`;
+          clDiv.appendChild(d);
+        })
+      }
+      */
+      
+      refreshAnnouncementsList();
+    }
+
+    async function addClass(){
+      // منطق مدیریت حذف شد
+    }
+
+    async function deleteClass(){
+      // منطق مدیریت حذف شد
+    }
+    
+    async function addStudent(){
+      // منطق مدیریت حذف شد
+    }
+
+    async function deleteStudent(){
+      // منطق مدیریت حذف شد
+    }
+
+    async function saveTuition(){
+      // منطق مدیریت حذف شد
+    }
+
+    async function saveBook(){
+      // منطق مدیریت حذف شد
+    }
+
+    async function sendMessage(senderRole){
+      // منطق مدیریت حذف شد
+    }
+    if($('send-message')) $('send-message').addEventListener('click',()=>sendMessage(currentRole));
+    
+    async function addAnnouncement(){
+      // منطق مدیریت حذف شد
+    }
+    if($('add-announcement')) $('add-announcement').addEventListener('click', addAnnouncement);
+
+    function refreshAnnouncementsList(){
+      // Reads from announcementsCache, no change needed
+      const announcements = getAnnouncements();
+      const listDiv = $('announcement-list');
+      if(!listDiv) return;
+      
+      listDiv.innerHTML = '';
+      if(announcements.length === 0) {
+        listDiv.innerHTML = '<div class="small">اطلاعیه‌ای ثبت نشده است.</div>';
+        return;
+      }
+      announcements.slice(0, 5).forEach(announcement => {
+        const d = document.createElement('div');
+        d.className = 'card small';
+        d.style.marginBottom = '6px';
+        d.innerHTML = `<strong>${announcement.title}</strong><span style="float:left">${announcement.date}</span><p style="margin-top:4px">${announcement.text}</p>`;
+        listDiv.appendChild(d);
+      });
+      if(announcements.length > 5) {
+        listDiv.innerHTML += '<div class="small" style="text-align:center">... اطلاعیه‌های قدیمی‌تر موجود است.</div>';
+      }
+    }
+    
+    function updateDashboardStudents(){
+      // منطق داشبورد حذف شد
+    }
+
+
+    async function buildAttendanceTable(){
+      // منطق داشبورد حذف شد
+    }
+
+    function calcAbsences(arr){
+      if(!arr) return 0;let c=0;arr.forEach(v=>{if(v===false)c++});return c;
+    }
+
+    window.showOnlyStudent = function(nid,classId){
+      // منطق داشبورد حذف شد
+    }
+
+    function updateStudentStatsPanel(nid,classId){
+      // منطق داشبورد حذف شد
+    }
+
+    function showStudentFromSearch(){
+      // منطق داشبورد حذف شد
+    }
+
+    async function saveGrade(){
+      // منطق داشبورد حذف شد
+    }
+
+    async function studentViewShow(){
+      // Reads from cache, no change needed (only fetching data is async)
+      const nid=$('sv-nid').value.trim();
+      const out=$('sv-result');out.innerHTML='';
+      if(!nid){out.innerHTML='<div class="small">لطفاً کد ملی را وارد کنید.</div>';return}
+      
+      const classes=getClasses();
+      const students=getStudents();
+      
+      const studentEntries = students.filter(s=>s.nid===nid);
+      
+      if(studentEntries.length === 0){out.innerHTML='<div class="small">زبان‌آموز با این کد ملی یافت نشد.</div>';return}
+      
+      const st = studentEntries[0]; 
+      
+      out.appendChild(document.createElement('h3')).textContent = 'وضعیت زبان‌آموز: ' + st.name + ' (' + st.nid + ')';
+      
+      studentEntries.forEach(entry => {
+        const clsId = entry.classId;
+        const cls = classes.find(c => c.id === clsId);
+        const attendance=getAttendance();const attEntry=(attendance[clsId]||{})[nid];
+        
+        out.appendChild(document.createElement('h4')).textContent = 'سوابق نمره و حضور در کلاس ' + (cls?.name || 'نامعلوم');
+        
+        if(attEntry && cls){
+          const totalCols = cls.terms * cls.sessionsPerTerm;
+          const tbl=document.createElement('table');
+          const h=document.createElement('tr');h.innerHTML='<th>ترم</th><th>حضور</th><th>غیبت</th><th>ثبت شده</th><th>باقیمانده</th><th>نمره</th>';
+          tbl.appendChild(h);
+          for(let t=1;t<=cls.terms;t++){
+            const sIndex=(t-1)*cls.sessionsPerTerm; const slice = attEntry.present.slice(sIndex,sIndex+cls.sessionsPerTerm);
+            const present = slice.filter(v=>v===true).length; const absent = slice.filter(v=>v===false).length; const marked = slice.filter(v=>v!==null).length; const remaining = slice.filter(v=>v===null).length;
+            const tr=document.createElement('tr'); tr.innerHTML=`<td>${t}</td><td>${present}</td><td>${absent}</td><td>${marked}</td><td>${remaining}</td><td>${(attEntry.grades && attEntry.grades[t]!==undefined)?attEntry.grades[t]:'-'}</td>`; tbl.appendChild(tr);
+          }
+          out.appendChild(tbl);
+          const totalAbs = attEntry.present.filter(v=>v===false).length;const totalMarked=attEntry.present.filter(v=>v!==null).length;
+          const div=document.createElement('div');div.className='small';div.style.marginTop='8px';div.innerHTML=`<div><strong>کل غیبت‌های این کلاس:</strong> ${totalAbs}</div><div><strong>جلسات ثبت‌شده این کلاس:</strong> ${totalMarked}/${totalCols}</div>`;
+          out.appendChild(div);
+        } else {
+          out.innerHTML+='<div class="small">برای این زبان‌آموز در این کلاس جدول حضور/نمره ثبت نشده است.</div>';
+        }
+      });
+      
+      out.appendChild(document.createElement('hr')).style.cssText = 'border:none;border-top:1px solid rgba(0,0,0,0.1);margin:16px 0';
+
+      out.appendChild(document.createElement('h4')).textContent = 'سابقه پرداخت شهریه (تاریخچه کل)';
+      if(st.tuition && st.tuition.length > 0) {
+        const tTbl=document.createElement('table');
+        const tH=document.createElement('tr');tH.innerHTML='<th>تاریخ</th><th>مبلغ (تومان)</th><th>کلاس ثبت‌شده</th>';tTbl.appendChild(tH);
+        st.tuition.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(t => {
+          const tr=document.createElement('tr');tr.innerHTML=`<td>${t.date}</td><td>${t.amount.toLocaleString('fa-IR')}</td><td>${classes.find(c => c.id === t.classId)?.name || '-'}</td>`;tTbl.appendChild(tr);
+        });
+        out.appendChild(tTbl);
+      } else {
+        out.innerHTML+='<div class="small">سابقه پرداخت شهریه ثبت نشده است.</div>';
+      }
+      
+      out.appendChild(document.createElement('h4')).textContent = 'کتاب‌های گذرانده شده (تاریخچه کل)';
+      if(st.books && st.books.length > 0) {
+        const bTbl=document.createElement('table');
+        const bH=document.createElement('tr');bH.innerHTML='<th>نام کتاب</th><th>تاریخ اتمام</th>';bTbl.appendChild(bH);
+        st.books.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(b => {
+          const tr=document.createElement('tr');tr.innerHTML=`<td>${b.name}</td><td>${b.date}</td>`;bTbl.appendChild(tr);
+        });
+        out.appendChild(bTbl);
+      } else {
+        out.innerHTML+='<div class="small">سابقه کتاب ثبت نشده است.</div>';
+      }
+
+      out.appendChild(document.createElement('h4')).textContent = 'صندوق پیام (تذکرات)';
+      if(st.messages && st.messages.length > 0) {
+        st.messages.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(m => {
+          const d = document.createElement('div');
+          d.className = 'card small';
+          d.style.background = 'rgba(0,123,255,0.05)'; 
+          d.style.marginBottom = '6px';
+          d.innerHTML = `<strong>${m.sender === 'admin' ? 'مدیر' : 'معلم'}</strong> <span style="float:left">${m.date}</span><p style="margin-top:4px">${m.text}</p>`;
+          out.appendChild(d);
+        });
+      } else {
+        out.innerHTML+='<div class="small">صندوق پیام خالی است.</div>';
+      }
+    }
+
+    // UI navigation
+    if($('btn-panel')) $('btn-panel').addEventListener('click',()=>{showSection('panel','btn-panel')});
+    if($('btn-dashboard')) $('btn-dashboard').addEventListener('click',async ()=>{showSection('dashboard','btn-dashboard');await buildAttendanceTable();});
+    if($('btn-student-view')) $('btn-student-view').addEventListener('click',()=>{showSection('student-view','btn-student-view');refreshLists();});
+
+    function showSection(id,btnId){
+      // این توابع نیز برای نمای تک‌صفحه‌ای ساده‌سازی شده‌اند تا فقط بخش‌های موجود را نمایش دهند
+      ['panel','dashboard','student-view','announcements'].forEach(s=>{if($(s)) $(s).style.display = 'none'});
+      const targetSection = $(id);
+      if(targetSection) targetSection.style.display = 'block';
+
+      document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+      if(btnId && $(btnId)) $(btnId).classList.add('active');
+      refreshLists();
+      if (id === 'dashboard') { updateDashboardStudents(); }
+    }
+    
+    // Admin Only features access check (before event listeners)
+    // مدیریت حذف شد
+    // سایر رویدادها که نیازمند عناصر حذف شده هستند، حذف شدند یا با null check محافظت شدند
+    
+    if ($('sv-show')) $('sv-show').addEventListener('click',studentViewShow);
+
+    // ==========================================
+    // INITIAL LOAD FUNCTION
+    // ==========================================
+    async function initialLoad() {
+      try {
+        // Fetch all data and populate cache (using default values for empty data)
+        const [classes, students, attendance, announcements] = await Promise.all([
+          fetchData('classes', []),
+          fetchData('students', []),
+          fetchData('attendance', {}),
+          fetchData('announcements', [])
+        ]);
+
+        classesCache = classes;
+        studentsCache = students;
+        attendanceCache = attendance;
+        announcementsCache = announcements;
+        
+        // Now that data is in cache, initialize UI
+        refreshLists();
+        setCurrentRole('student'); // تنظیم نقش به student برای پورتال زبان‌آموز
+        
+      } catch (error) {
+        // Error already alerted by handleFirebaseOperation, just log and halt UI init
+        console.log('UI initialization halted due to Firebase error.');
+      }
+    }
+
+    // Run initial load
+    initialLoad();
+    
+    
+    // برای اطمینان از نمایش صحیح student-view در ابتدا (پس از بارگیری اولیه)
+    document.addEventListener('DOMContentLoaded', () => {
+        showSection('student-view', 'btn-student-view'); 
+    });
+    
+    
+    // عناصر دامی که باعث مشکل می‌شدند حذف شدند.
+    
+    </script>
+</body>
+</html>
