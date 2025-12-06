@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>پنل و داشبورد آموزشگاه زبان</title>
+  
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<style>
+    /* -------------------- BASE -------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  background: #0d1117;
+  font-family: "Vazirmatn", sans-serif;
+  color: #e6edf3;
+}
+
+h1, h2, h3, h4 {
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+small, .small {
+  font-size: 13px;
+  opacity: .8;
+}
+
+/* -------------------- HEADER -------------------- */
+header {
+  background: #161b22;
+  padding: 16px;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+header h1 {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* -------------------- LAYOUT -------------------- */
+.wrap {
+  display: flex;
+  height: calc(100vh - 70px);
+}
+
+/* -------------------- SIDEBAR -------------------- */
+nav {
+  width: 240px;
+  background: #161b22;
+  border-left: 1px solid #30363d;
+  padding: 14px;
+  overflow-y: auto;
+}
+
+nav button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 6px;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: .15s;
+}
+
+nav button:hover {
+  background: #30363d;
+}
+
+nav button.active {
+  background: #238636;
+  border-color: #2ea043;
+}
+
+/* -------------------- MAIN -------------------- */
+main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* -------------------- CARDS -------------------- */
+.card {
+  background: #161b22;
+  padding: 16px;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* -------------------- INPUTS -------------------- */
+label {
+  margin-bottom: 4px;
+  display: block;
+  font-weight: 600;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #2ea043;
+  box-shadow: 0 0 0 2px rgba(46, 160, 67, .3);
+}
+
+/* -------------------- BUTTONS -------------------- */
+button {
+  padding: 10px 16px;
+  background: #238636;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .15s;
+}
+
+button:hover {
+  background: #2ea043;
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+/* Danger button */
+button.danger {
+  background: #da3633;
+}
+button.danger:hover {
+  background: #f85149;
+}
+
+/* -------------------- GRID SYSTEM -------------------- */
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.col {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* -------------------- RIGHT PANEL -------------------- */
+.right-panel {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* -------------------- TABLE STYLES -------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #0d1117;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+table th, table td {
+  border: 1px solid #30363d;
+  padding: 8px;
+  text-align: center;
+}
+
+table th {
+  background: #21262d;
+  font-weight: 600;
+}
+
+/* -------------------- ANNOUNCEMENTS -------------------- */
+.announcement-box {
+  padding: 10px;
+  background: #21262d;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.announcement-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 850px) {
+  .wrap {
+    flex-direction: column;
+  }
+
+  nav {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+  }
+
+  nav button {
+    min-width: 150px;
+  }
+
+  .right-panel {
+    width: 100%;
+  }
+}
+
+</style>
+
+</head>
+<body>
+  <header>
+    <h1>سامانه مدیریت آموزشگاه زبان</h1>
+    <div style="margin-right:auto" class="small">ذخیره: فایربیس فایراستور</div>
+    <div class="controls" style="width:280px">
+      <label style="margin-bottom:0">نقش فعلی:</label>
+      <select id="current-role" style="width:160px">
+        <option value="admin">مدیر (Admin)</option>
+        <option value="teacher">معلم (Teacher)</option>
+        <option value="student">دانش‌آموز (Student)</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <nav>
+      <button id="btn-panel" class="active admin-only">پنل مدیریت</button>
+      <button id="btn-dashboard" class="admin-teacher-only">داشبورد کلاس</button>
+      <button id="btn-student-view">نمایش زبان‌آموز (کد ملی)</button>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,.03);margin:10px 0">
+      <div class="small admin-teacher-only">دسترسی سریع</div>
+      <div style="margin-top:8px" class="admin-teacher-only">
+        <select id="select-class-quick"></select>
+      </div>
+      <div style="margin-top:8px" class="controls admin-teacher-only">
+        <button id="open-dashboard-quick">باز کردن داشبورد</button>
+      </div>
+    </nav>
+
+    <main>
+            <section id="panel" class="card admin-only">
+        <h3>پنل مدیریت</h3>
+        <div class="card">
+          <h4>افزودن کلاس جدید</h4>
+                    <div class="row">
+            <div class="col">
+              <label>نام کلاس</label>
+              <input id="class-name" placeholder="مثلاً Intensive 2" />
+            </div>
+            <div class="col">
+              <label>نام معلم</label>
+              <input id="class-teacher" placeholder="نام معلم" />
+            </div>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <div class="col">
+              <label>نام کتاب</label>
+              <input id="class-book" placeholder="نام کتاب اصلی کلاس" />
+            </div>
+            <div style="width:160px">
+              <label>تعداد ترم</label>
+              <input id="class-terms" type="number" min="1" value="3" />
+            </div>
+            <div style="width:160px">
+              <label>جلسات هر ترم</label>
+              <input id="sessions-per-term" type="number" min="1" value="12" />
+            </div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button id="add-class">افزودن کلاس</button>
+            <button id="delete-class">حذف کلاس انتخابی</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>مدیریت زبان‌آموزان (ثبت/حذف)</h4>
+          <div class="row">
+            <div class="col"><label>کد ملی</label><input id="student-nid" placeholder="کد ملی (ورود دانش‌آموز)" /></div>
+            <div class="col"><label>نام زبان‌آموز</label><input id="student-name" placeholder="نام کامل" /></div>
+            <div style="width:220px"><label>انتخاب کلاس</label><select id="student-class"></select></div>
+          </div>
+          <div style="margin-top:8px" class="row">
+            <div class="col"><button id="add-student">افزودن زبان‌آموز</button></div>
+            <div class="col"><button id="delete-student">حذف زبان‌آموز از کلاس</button></div>
+          </div>
+        </div>
+
+                <div class="row" style="margin-top:12px">
+          <div class="card col">
+            <h4>ثبت پرداخت شهریه</h4>
+            <label>کلاس</label><select id="tuition-class" onchange="populateDependentStudentSelect('tuition-class', 'tuition-student-select')"></select>
+            <label style="margin-top:6px">انتخاب زبان‌آموز</label><select id="tuition-student-select"></select>
+            <div class="row" style="margin-top:6px">
+              <div class="col"><label>مبلغ (تومان)</label><input id="tuition-amount" type="number" min="1000" /></div>
+              <div class="col"><label>تاریخ پرداخت</label><input id="tuition-date" type="date" value="2025-12-06" /></div>
+            </div>
+            <div style="margin-top:8px"><button id="save-tuition">ثبت شهریه (مدیر)</button></div>
+          </div>
+          <div class="card col">
+            <h4>ثبت سابقه کتاب</h4>
+            <label>انتخاب کلاس</label><select id="book-class-select" onchange="populateDependentStudentSelect('book-class-select', 'book-student-select')"></select>
+            <label style="margin-top:6px">انتخاب زبان‌آموز</label><select id="book-student-select"></select>
+            <label style="margin-top:6px">نام کتاب گذرانده شده</label><input id="book-name" placeholder="مثلاً Top Notch 2A" />
+            <label style="margin-top:6px">تاریخ اتمام</label><input id="book-date" type="date" value="2025-12-06" />
+            <div style="margin-top:8px"><button id="save-book">ثبت سابقه کتاب (مدیر)</button></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h4>کلاس‌ها</h4>
+          <div id="classes-list" class="small"></div>
+        </div>
+      </section>
+
+            <section id="dashboard" class="card admin-teacher-only" style="display:none">
+        <h3>داشبورد کلاس</h3>
+        <div style="display:flex;gap:12px">
+                    <div style="flex:1">
+            <label>انتخاب کلاس</label>
+            <select id="dashboard-class"></select>
+          </div>
+          <div style="width:160px">
+            <label>ترم جاری</label>
+            <input id="dashboard-current-term" type="number" min="1" value="1" />
+          </div>
+          <div style="width:160px">
+            <label>نمایش</label>
+            <select id="dashboard-show-mode"><option value="all">همه زبان‌آموزان</option><option value="only-active">فقط دارای ثبت</option></select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <div style="flex:1;overflow:auto">
+            <div id="attendance-table-wrap"></div>
+          </div>
+          <aside class="right-panel">
+            <div class="card stats">
+              <h4>جستجو (انتخاب زبان‌آموز)</h4>
+              <label>انتخاب زبان‌آموز</label>
+              <select id="search-student-select"></select>
+              <div style="margin-top:8px"><button id="search-show">نمایش وضعیت</button></div>
+              <hr style="border:none;border-top:1px solid rgba(255,255,255,.03);margin:8px 0">
+              <div id="student-stats" class="small">ابتدا زبان‌آموز را انتخاب کنید.</div>
+            </div>
+
+            <div class="card" style="margin-top:10px">
+              <h4>نمرات ترم (معلم/مدیر)</h4>
+              <label>ترم</label>
+              <input id="grade-term" type="number" min="1" value="1" />
+              <label style="margin-top:6px">انتخاب زبان‌آموز</label>
+              <select id="grade-student-select"></select>
+              <label style="margin-top:6px">نمره (۰ تا ۱۰۰)</label>
+              <input id="grade-value" type="number" min="0" max="100" />
+              <div style="margin-top:8px"><button id="save-grade">ذخیره نمره</button></div>
+            </div>
+
+                        <div class="card" style="margin-top:10px">
+              <h4>صندوق پیام (تذکرات)</h4>
+              <label>انتخاب زبان‌آموز</label><select id="message-student-select"></select>
+              <label style="margin-top:6px">متن پیام (تذکر درسی/اخلاقی)</label><textarea id="message-text" rows="3"></textarea>
+              <div style="margin-top:8px"><button id="send-message">ارسال پیام</button></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+            <section id="student-view" class="card" style="display:none">
+        <h3>نمایش زبان‌آموز (ورود با کد ملی)</h3>
+        <div class="row">
+          <div class="col">
+            <label>کد ملی</label>
+            <input id="sv-nid" placeholder="کد ملی" />
+          </div>
+          <div style="width:140px">
+            <label>نمایش</label>
+            <button id="sv-show">نمایش</button>
+          </div>
+        </div>
+        <div style="margin-top:12px" id="sv-result"></div>
+      </section>
+
+            <section id="announcements" class="card" style="display:none">
+        <h3>اطلاعیه‌ها و پیام‌های عمومی</h3>
+        <div id="announcement-list" style="margin-bottom:12px"></div>
+        <div class="card admin-only">
+          <h4>ارسال اطلاعیه جدید (مدیر)</h4>
+          <input id="announcement-title" placeholder="عنوان (مثلاً تعطیلی کلاس)" />
+          <textarea id="announcement-text" rows="2" style="margin-top:6px" placeholder="متن اطلاعیه"></textarea>
+          <div style="margin-top:8px"><button id="add-announcement">ارسال اطلاعیه</button></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+<script src="jsapp.js"></script>
+</body>
+</html>
